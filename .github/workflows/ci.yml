@@ -1,0 +1,87 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  static-analysis:
+    name: Static analysis (PHPCS + PHPStan)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: composer:v2
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.composer/cache
+          key: composer-${{ runner.os }}-${{ hashFiles('composer.json') }}
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: PHPCS (Drupal + DrupalPractice)
+        run: vendor/bin/phpcs --standard=Drupal,DrupalPractice src tests
+
+      - name: PHPStan
+        run: vendor/bin/phpstan analyse -c phpstan.neon src tests
+
+  kernel-tests:
+    name: Kernel tests (MySQL)
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: drupal
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: d7_to_d11_migrations
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: gd, pdo_mysql, opcache
+          coverage: none
+          tools: composer:v2
+
+      - name: Bootstrap Drupal 11 with the module
+        working-directory: ${{ github.workspace }}
+        run: |
+          composer create-project drupal/recommended-project:^11 d11 --no-interaction
+          cd d11
+          composer config minimum-stability dev
+          composer config repositories.local path ../d7_to_d11_migrations
+          composer require nikolaj/d7-to-d11-migration-kit:@dev
+          composer require --dev drupal/core-dev:^11 phpunit/phpunit
+
+      - name: Run kernel tests
+        working-directory: ${{ github.workspace }}/d11
+        env:
+          SIMPLETEST_DB: 'mysql://root:root@127.0.0.1:3306/drupal'
+          SIMPLETEST_BASE_URL: 'http://localhost'
+        run: |
+          ./vendor/bin/phpunit \
+            -c web/core/phpunit.xml.dist \
+            --group d7_to_d11_migrations \
+            web/modules/contrib/d7-to-d11-migration-kit/tests

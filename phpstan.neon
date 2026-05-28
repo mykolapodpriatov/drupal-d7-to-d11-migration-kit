@@ -1,0 +1,14 @@
+parameters:
+  level: 5
+  paths:
+    - src
+    - tests
+  excludePaths:
+    - vendor
+  treatPhpDocTypesAsCertain: false
+  ignoreErrors:
+    - '#Call to an undefined method Drupal\\migrate\\Row::set#'
+
+includes:
+  - vendor/mglaman/phpstan-drupal/extension.neon
+  - vendor/mglaman/phpstan-drupal/rules.neon
