@@ -1,0 +1,63 @@
+id: d7_redirects
+label: 'D7 redirects to D11 redirect module'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+  - redirect
+
+source:
+  plugin: d7_path_redirect
+
+process:
+  rid: rid
+  uid:
+    plugin: migration_lookup
+    migration: d7_users
+    source: uid
+    no_stub: true
+
+  redirect_source/path:
+    plugin: callback
+    callable: ltrim
+    source: source
+    unpack_source: true
+    # 'callable' receives the array unpacked; we pass source + '/' to strip.
+  redirect_source/query: source_options/query
+
+  # Resolve internal D7 destinations (`node/123`) to canonical D11 paths via
+  # the migrated node ids; otherwise keep external destinations as-is.
+  redirect_redirect:
+    plugin: d7_to_d11_path_to_alias
+    source: redirect
+    node_migration: d7_node_article
+    page_migration: d7_node_page
+    fallback_internal_prefix: 'internal:/'
+
+  status_code:
+    plugin: static_map
+    source: status_code
+    map:
+      0: 301
+      301: 301
+      302: 302
+      307: 307
+    default_value: 301
+
+  language:
+    plugin: default_value
+    source: language
+    default_value: 'und'
+
+  created: access
+
+destination:
+  plugin: 'entity:redirect'
+
+migration_dependencies:
+  required:
+    - d7_node_article
+    - d7_node_page
+  optional:
+    - d7_users
