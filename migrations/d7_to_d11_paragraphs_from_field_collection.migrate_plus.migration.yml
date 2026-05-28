@@ -1,0 +1,57 @@
+id: d7_paragraphs_from_field_collection
+label: 'D7 field_collection to D11 paragraphs'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+  - paragraphs
+
+source:
+  plugin: d7_field_collection_item
+  # Set the D7 field_collection bundle to migrate. One migration per bundle.
+  field_name: field_call_to_action
+
+process:
+  id: item_id
+  type:
+    plugin: default_value
+    default_value: call_to_action
+
+  langcode:
+    plugin: default_value
+    default_value: 'en'
+
+  status:
+    plugin: default_value
+    default_value: 1
+
+  # Map the inner CTA fields. D7 field_collection_item has its own field table.
+  'field_cta_headline/value': field_cta_headline/0/value
+  'field_cta_headline/format':
+    plugin: static_map
+    source: field_cta_headline/0/format
+    map:
+      plain_text: plain_text
+      filtered_html: basic_html
+      full_html: full_html
+    default_value: plain_text
+
+  'field_cta_link/uri':
+    plugin: callback
+    callable: '\Drupal\d7_to_d11_migrations\Helper\LinkConverter::toD11Uri'
+    source: field_cta_link/0/url
+  'field_cta_link/title': field_cta_link/0/title
+
+  'field_cta_image/target_id':
+    plugin: migration_lookup
+    migration: d7_files
+    source: field_cta_image/0/fid
+
+destination:
+  plugin: 'entity_reference_revisions:paragraph'
+  default_bundle: call_to_action
+
+migration_dependencies:
+  required:
+    - d7_files
