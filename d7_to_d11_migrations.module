@@ -1,0 +1,43 @@
+<?php
+
+/**
+ * @file
+ * Hooks for the D7 to D11 migration kit.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function d7_to_d11_migrations_help(string $route_name, RouteMatchInterface $route_match): string {
+  if ($route_name !== 'help.page.d7_to_d11_migrations') {
+    return '';
+  }
+
+  $output = '<h2>' . t('D7 to D11 Migration Kit') . '</h2>';
+  $output .= '<p>' . t('Provides the <code>d7_to_d11_content</code> migration group and a set of custom process plugins used by the included YAML configs.') . '</p>';
+  $output .= '<p>' . t('Run <code>drush ms --group=d7_to_d11_content</code> to inspect status, then <code>drush mim --group=d7_to_d11_content</code> to execute the full pipeline.') . '</p>';
+
+  return $output;
+}
+
+/**
+ * Implements hook_migration_plugins_alter().
+ *
+ * Inject the configured source database key into every migration in the group
+ * if the per-migration definition has not pinned it explicitly.
+ */
+function d7_to_d11_migrations_migration_plugins_alter(array &$migrations): void {
+  foreach ($migrations as $id => &$migration) {
+    if (!isset($migration['migration_group']) || $migration['migration_group'] !== 'd7_to_d11_content') {
+      continue;
+    }
+
+    if (isset($migration['source']) && !isset($migration['source']['key'])) {
+      $migration['source']['key'] = 'migrate_d7';
+    }
+  }
+}

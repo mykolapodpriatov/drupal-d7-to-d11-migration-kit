@@ -1,0 +1,49 @@
+<?php
+
+/**
+ * @file
+ * Install / requirements hooks for d7_to_d11_migrations.
+ */
+
+declare(strict_types=1);
+
+use Drupal\Core\Database\Database;
+
+/**
+ * Implements hook_requirements().
+ *
+ * Verifies that the D7 source database key is registered in settings.php.
+ */
+function d7_to_d11_migrations_requirements(string $phase): array {
+  $requirements = [];
+
+  if ($phase !== 'runtime' && $phase !== 'install') {
+    return $requirements;
+  }
+
+  $source_key = 'migrate_d7';
+  $info = Database::getConnectionInfo($source_key);
+
+  if (empty($info)) {
+    $requirements['d7_to_d11_migrations_source_db'] = [
+      'title' => t('D7 to D11 Migration Kit: source database'),
+      'value' => t('Not configured'),
+      'description' => t('No <code>@key</code> database connection is registered in settings.php. The migrations in the <code>d7_to_d11_content</code> group will not be able to read from the Drupal 7 source. See <code>examples/settings.php.d7-source-snippet.php</code>.', [
+        '@key' => $source_key,
+      ]),
+      'severity' => REQUIREMENT_WARNING,
+    ];
+
+    return $requirements;
+  }
+
+  $requirements['d7_to_d11_migrations_source_db'] = [
+    'title' => t('D7 to D11 Migration Kit: source database'),
+    'value' => t('Configured (@driver)', [
+      '@driver' => $info['default']['driver'] ?? 'unknown',
+    ]),
+    'severity' => REQUIREMENT_OK,
+  ];
+
+  return $requirements;
+}

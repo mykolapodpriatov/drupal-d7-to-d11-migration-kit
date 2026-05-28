@@ -1,0 +1,8 @@
+services:
+  d7_to_d11_migrations.media_uuid_resolver:
+    class: Drupal\d7_to_d11_migrations\Service\MediaUuidResolver
+    arguments: ['@entity_type.manager', '@plugin.manager.migration']
+
+  d7_to_d11_migrations.path_alias_resolver:
+    class: Drupal\d7_to_d11_migrations\Service\D7PathAliasResolver
+    arguments: ['@database']

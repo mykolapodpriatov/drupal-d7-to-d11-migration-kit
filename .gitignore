@@ -1,0 +1,32 @@
+# Composer
+/vendor/
+composer.lock
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# PHPStan
+.phpstan-cache/
+phpstan.cache
+
+# PHPUnit
+.phpunit.result.cache
+.phpunit.cache/
+
+# Drupal local
+sites/default/files/
+sites/*/settings.local.php
+
+# Logs
+*.log
+
+# Backup files
+*~
+*.bak
+*.swp

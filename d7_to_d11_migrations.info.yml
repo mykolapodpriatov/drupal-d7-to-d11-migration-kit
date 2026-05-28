@@ -1,0 +1,18 @@
+name: 'D7 to D11 Migration Kit'
+type: module
+description: 'Ready-made migration YAML configs and custom process plugins for migrating from Drupal 7 to Drupal 11.'
+package: Migration
+core_version_requirement: ^11
+dependencies:
+  - drupal:migrate
+  - drupal:migrate_drupal
+  - drupal:migrate_drupal_ui
+  - drupal:file
+  - drupal:taxonomy
+  - drupal:node
+  - drupal:user
+  - migrate_plus:migrate_plus
+  - migrate_tools:migrate_tools
+test_dependencies:
+  - drupal:dblog
+configure: migrate_tools.messages
