@@ -1,0 +1,58 @@
+id: d7_node_page
+label: 'D7 basic page nodes'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+  - node
+
+source:
+  plugin: d7_node
+  node_type: page
+
+process:
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: page
+
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: 'en'
+
+  title: title
+  status: status
+  promote: promote
+  sticky: sticky
+  created: created
+  changed: changed
+  revision_timestamp: timestamp
+  revision_log: log
+
+  uid:
+    plugin: migration_lookup
+    migration: d7_users
+    source: node_uid
+    no_stub: true
+
+  'body/value': body/0/value
+  'body/summary': body/0/summary
+  'body/format':
+    plugin: static_map
+    source: body/0/format
+    map:
+      plain_text: plain_text
+      filtered_html: basic_html
+      full_html: full_html
+    default_value: basic_html
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: page
+
+migration_dependencies:
+  required:
+    - d7_users

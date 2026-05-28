@@ -1,0 +1,90 @@
+id: d7_node_article
+label: 'D7 article nodes'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+  - node
+
+source:
+  plugin: d7_node
+  node_type: article
+
+process:
+  nid: nid
+  vid: vid
+  type:
+    plugin: default_value
+    default_value: article
+
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: 'en'
+
+  title: title
+  status: status
+  promote: promote
+  sticky: sticky
+  created: created
+  changed: changed
+  revision_timestamp: timestamp
+  revision_log: log
+
+  uid:
+    plugin: migration_lookup
+    migration: d7_users
+    source: node_uid
+    no_stub: true
+
+  revision_uid:
+    plugin: migration_lookup
+    migration: d7_users
+    source: revision_uid
+    no_stub: true
+
+  # Body: D7 stored value/summary/format. We rewrite inline media tokens and
+  # legacy <img src="/sites/default/files/..."> references into D11
+  # <drupal-media> tags pointing at the migrated media entities.
+  'body/value':
+    plugin: d7_to_d11_rewrite_media_embeds
+    source: body/0/value
+    media_migration: d7_file_to_media
+  'body/summary': body/0/summary
+  'body/format':
+    plugin: static_map
+    source: body/0/format
+    map:
+      plain_text: plain_text
+      filtered_html: basic_html
+      full_html: full_html
+    default_value: basic_html
+
+  # Hero image: D7 field_image is a file reference; D11 keeps it as image.
+  'field_image/target_id':
+    plugin: migration_lookup
+    migration: d7_files
+    source: field_image/0/fid
+  'field_image/alt': field_image/0/alt
+  'field_image/title': field_image/0/title
+
+  # Tags: D7 entity reference to taxonomy_term.
+  'field_tags':
+    plugin: sub_process
+    source: field_tags
+    process:
+      target_id:
+        plugin: migration_lookup
+        migration: d7_taxonomy_term
+        source: tid
+
+destination:
+  plugin: 'entity:node'
+  default_bundle: article
+
+migration_dependencies:
+  required:
+    - d7_users
+    - d7_files
+    - d7_taxonomy_term
