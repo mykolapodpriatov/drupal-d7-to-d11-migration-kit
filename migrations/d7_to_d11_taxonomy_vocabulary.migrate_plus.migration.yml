@@ -1,0 +1,35 @@
+id: d7_taxonomy_vocabulary
+label: 'D7 taxonomy vocabularies'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Configuration
+  - d7_to_d11
+
+source:
+  plugin: d7_taxonomy_vocabulary
+
+process:
+  # Some D7 sites used vocabulary machine names with dashes; D11 disallows
+  # those. Map known offenders here. The fallback simply normalises.
+  vid:
+    -
+      plugin: static_map
+      source: machine_name
+      map:
+        product-categories: product_category
+        news-tags: news_tag
+      bypass: true
+    -
+      plugin: machine_name
+
+  label: name
+  name: name
+  description: description
+  hierarchy: hierarchy
+  weight: weight
+
+destination:
+  plugin: 'entity:taxonomy_vocabulary'
+
+migration_dependencies: {  }

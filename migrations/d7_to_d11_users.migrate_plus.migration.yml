@@ -1,0 +1,84 @@
+id: d7_users
+label: 'D7 users to D11 users'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+
+source:
+  plugin: d7_user
+  # The migrate_drupal d7_user source already excludes the anonymous user.
+  # We exclude uid 1 here as well: D11 already has its own administrator and
+  # role assignments must be done by hand in that single case.
+  constants:
+    skip_uid_one: 1
+
+process:
+  # Preserve UIDs to keep node authorship references intact.
+  uid:
+    -
+      plugin: skip_on_value
+      source: uid
+      value: 1
+      method: row
+    -
+      plugin: get
+      source: uid
+
+  name: name
+  mail: mail
+  init: init
+  status: status
+  timezone: timezone
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: 'en'
+  preferred_langcode:
+    plugin: default_value
+    source: language
+    default_value: 'en'
+  created: created
+  changed: changed
+  access: access
+  login: login
+
+  # Password is rehashed by the user save path; users will need to reset.
+  # We still copy the D7 hash into pass so the column is not empty.
+  pass: pass
+
+  # Signature: D7 stored signature + signature_format on the user row.
+  signature: signature
+  signature_format:
+    plugin: static_map
+    source: signature_format
+    map:
+      plain_text: plain_text
+      filtered_html: basic_html
+      full_html: full_html
+    default_value: basic_html
+
+  # Picture: D7 user picture is a managed file fid.
+  user_picture/target_id:
+    plugin: migration_lookup
+    migration: d7_files
+    source: picture
+
+  # Roles: D7 numeric rids -> D11 role machine names.
+  roles:
+    plugin: d7_to_d11_role_map
+    source: roles
+    map:
+      2: authenticated
+      3: administrator
+      4: editor
+    default_value: authenticated
+
+destination:
+  plugin: 'entity:user'
+  md5_passwords: true
+
+migration_dependencies:
+  required:
+    - d7_files

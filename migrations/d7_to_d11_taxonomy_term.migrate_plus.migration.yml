@@ -1,0 +1,60 @@
+id: d7_taxonomy_term
+label: 'D7 taxonomy terms'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+
+source:
+  plugin: d7_taxonomy_term
+
+process:
+  tid: tid
+
+  vid:
+    -
+      plugin: static_map
+      source: machine_name
+      map:
+        product-categories: product_category
+        news-tags: news_tag
+      bypass: true
+    -
+      plugin: machine_name
+
+  langcode:
+    plugin: default_value
+    source: language
+    default_value: 'en'
+
+  name: name
+  description/value: description
+  description/format:
+    plugin: static_map
+    source: format
+    map:
+      plain_text: plain_text
+      filtered_html: basic_html
+      full_html: full_html
+    default_value: basic_html
+
+  weight: weight
+
+  # D7 stores parents as an array of tids; first element of [0] when none.
+  parent:
+    -
+      plugin: skip_on_empty
+      method: process
+      source: parent
+    -
+      plugin: migration_lookup
+      migration: d7_taxonomy_term
+      source: parent
+
+destination:
+  plugin: 'entity:taxonomy_term'
+
+migration_dependencies:
+  required:
+    - d7_taxonomy_vocabulary
