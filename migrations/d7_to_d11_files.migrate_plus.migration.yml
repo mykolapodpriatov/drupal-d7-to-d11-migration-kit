@@ -1,0 +1,54 @@
+id: d7_files
+label: 'D7 managed files'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+
+source:
+  plugin: d7_file
+  constants:
+    # Resolved via the migration_group's shared_configuration.
+    # source_base_path is injected by the group.
+    public_scheme: 'public://'
+    private_scheme: 'private://'
+
+process:
+  fid: fid
+  filename: filename
+  uri:
+    -
+      plugin: d7_to_d11_ensure_file_public
+      source: uri
+      public_destination: 'public://'
+      private_destination: 'private://'
+
+  filemime: filemime
+  filesize: filesize
+  status: status
+  created: timestamp
+  changed: timestamp
+
+  uid:
+    plugin: migration_lookup
+    migration: d7_users
+    source: uid
+
+  source_full_path:
+    -
+      plugin: concat
+      source:
+        - constants/source_base_path
+        - filepath_without_scheme
+    -
+      plugin: urlencode
+
+destination:
+  plugin: 'entity:file'
+  source_path_property: source_full_path
+
+migration_dependencies:
+  required: {  }
+  optional:
+    - d7_users
