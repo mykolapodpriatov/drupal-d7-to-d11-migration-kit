@@ -19,11 +19,14 @@ process:
     no_stub: true
 
   redirect_source/path:
-    plugin: callback
-    callable: ltrim
+    # Drupal stores redirect sources without a leading slash; strip one
+    # defensively if the D7 data has it (callback+ltrim cannot pass the '/'
+    # argument, so use a regex str_replace).
+    plugin: str_replace
     source: source
-    unpack_source: true
-    # 'callable' receives the array unpacked; we pass source + '/' to strip.
+    regex: true
+    search: '#^/#'
+    replace: ''
   redirect_source/query: source_options/query
 
   # Resolve internal D7 destinations (`node/123`) to canonical D11 paths via

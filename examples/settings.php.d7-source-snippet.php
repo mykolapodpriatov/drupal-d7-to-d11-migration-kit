@@ -8,7 +8,7 @@
  * Drupal 11 site BEFORE running any migration from this kit.
  *
  * The connection key (`migrate_d7`) must match the value used inside
- * `migrations/d7_to_d11_content.group.yml` and is what
+ * `config/install/migrate_plus.migration_group.d7_to_d11_content.yml` and is what
  * `hook_requirements()` in d7_to_d11_migrations.install verifies.
  */
 
@@ -43,7 +43,7 @@ $databases['migrate_d7']['default'] = [
  * If your D7 `file_public_path` is different, update the constant
  * `source_base_path` in:
  *
- *   migrations/d7_to_d11_content.group.yml
+ *   config/install/migrate_plus.migration_group.d7_to_d11_content.yml
  *
  * to the absolute path that points at the D7 files directory as seen from
  * the D11 web server. Trailing slash is required.

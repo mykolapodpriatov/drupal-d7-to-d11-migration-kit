@@ -35,7 +35,7 @@ Two settings on the D7 side matter:
 
 In this kit:
 
-- `source_base_path` in `d7_to_d11_content.group.yml` must point at the D7
+- `source_base_path` in `config/install/migrate_plus.migration_group.d7_to_d11_content.yml` must point at the D7
   public files directory **as it is reachable from the D11 server**. Trailing
   slash required.
 - `EnsureFilePublic` lets you re-route per file. Some sites used `public://`

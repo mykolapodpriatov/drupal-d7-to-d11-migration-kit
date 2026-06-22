@@ -72,7 +72,7 @@ jobs:
           cd d11
           composer config minimum-stability dev
           composer config repositories.local path ../d7_to_d11_migrations
-          composer require nikolaj/d7-to-d11-migration-kit:@dev
+          composer require mykolapodpriatov/drupal-d7-to-d11-migration-kit:@dev
           composer require --dev drupal/core-dev:^11 phpunit/phpunit
 
       - name: Run kernel tests

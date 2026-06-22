@@ -1,9 +1,9 @@
 {
-    "name": "nikolaj/d7-to-d11-migration-kit",
+    "name": "mykolapodpriatov/drupal-d7-to-d11-migration-kit",
     "description": "Drop-in migration module for Drupal 7 to Drupal 11 with ready-made YAML configs and custom process plugins for common pain points.",
     "type": "drupal-module",
     "license": "MIT",
-    "homepage": "https://github.com/nikolaj/drupal-d7-to-d11-migration-kit",
+    "homepage": "https://github.com/mykolapodpriatov/drupal-d7-to-d11-migration-kit",
     "keywords": [
         "drupal",
         "drupal11",
@@ -17,11 +17,11 @@
         "php": ">=8.3",
         "drupal/core": "^11",
         "drupal/migrate_plus": "^6",
-        "drupal/migrate_tools": "^6"
+        "drupal/migrate_tools": "^6",
+        "drupal/paragraphs": "^1.18",
+        "drupal/redirect": "^1.10"
     },
     "suggest": {
-        "drupal/paragraphs": "Required if migrating D7 field_collection items into D11 paragraphs.",
-        "drupal/redirect": "Required if migrating D7 redirect module data.",
         "drupal/media_migration": "Required when migrating D7 file-attached fields into D11 media entities."
     },
     "require-dev": {
