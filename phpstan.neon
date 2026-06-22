@@ -7,8 +7,8 @@ parameters:
     - vendor
   treatPhpDocTypesAsCertain: false
   ignoreErrors:
-    - '#Call to an undefined method Drupal\\migrate\\Row::set#'
-
-includes:
-  - vendor/mglaman/phpstan-drupal/extension.neon
-  - vendor/mglaman/phpstan-drupal/rules.neon
+    # lookupMediaUuidByPath() is a documented extension point: the default
+    # implementation returns NULL, but subclasses may return a media UUID.
+    -
+      message: '#never returns string so it can be removed from the return type#'
+      path: src/Plugin/migrate/process/RewriteMediaEmbeds.php

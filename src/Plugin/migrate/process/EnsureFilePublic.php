@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace Drupal\d7_to_d11_migrations\Plugin\migrate\process;
 
-use Drupal\Core\File\FileSystemInterface;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
-use Symfony\Component\DependencyInjection\ContainerInterface;
-use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
 
 /**
  * Normalises a D7 file URI to the configured D11 destination scheme.
@@ -37,28 +34,7 @@ use Drupal\Core\Plugin\ContainerFactoryPluginInterface;
  *   handle_multiples = FALSE
  * )
  */
-final class EnsureFilePublic extends ProcessPluginBase implements ContainerFactoryPluginInterface {
-
-  public function __construct(
-    array $configuration,
-    string $plugin_id,
-    array $plugin_definition,
-    private readonly FileSystemInterface $fileSystem,
-  ) {
-    parent::__construct($configuration, $plugin_id, $plugin_definition);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public static function create(ContainerInterface $container, array $configuration, $plugin_id, $plugin_definition): self {
-    return new self(
-      $configuration,
-      $plugin_id,
-      $plugin_definition,
-      $container->get('file_system'),
-    );
-  }
+final class EnsureFilePublic extends ProcessPluginBase {
 
   /**
    * {@inheritdoc}

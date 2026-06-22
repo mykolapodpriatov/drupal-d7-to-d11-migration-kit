@@ -33,7 +33,7 @@ jobs:
         run: vendor/bin/phpcs --standard=Drupal,DrupalPractice src tests
 
       - name: PHPStan
-        run: vendor/bin/phpstan analyse -c phpstan.neon src tests
+        run: vendor/bin/phpstan analyse -c phpstan.neon src tests --memory-limit=1G
 
   kernel-tests:
     name: Kernel tests (MySQL)
@@ -73,7 +73,7 @@ jobs:
           composer config minimum-stability dev
           composer config repositories.local path ../d7_to_d11_migrations
           composer require mykolapodpriatov/drupal-d7-to-d11-migration-kit:@dev
-          composer require --dev drupal/core-dev:^11 phpunit/phpunit
+          composer require --dev drupal/core-dev:^11 --with-all-dependencies
 
       - name: Run kernel tests
         working-directory: ${{ github.workspace }}/d11
@@ -84,4 +84,4 @@ jobs:
           ./vendor/bin/phpunit \
             -c web/core/phpunit.xml.dist \
             --group d7_to_d11_migrations \
-            web/modules/contrib/d7-to-d11-migration-kit/tests
+            web/modules/contrib/d7_to_d11_migrations/tests
