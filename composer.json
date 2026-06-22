@@ -33,10 +33,23 @@
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "extra": {
+        "installer-name": "d7_to_d11_migrations"
+    },
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "drupal/core-composer-scaffold": true,
+            "phpstan/extension-installer": true,
+            "php-http/discovery": true,
+            "tbachert/spi": true
         }
     }
 }

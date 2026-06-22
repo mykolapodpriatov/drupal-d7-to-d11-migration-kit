@@ -23,9 +23,10 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *  2. Plain `<img>` tags referencing the D7 file directory:
  *       `<img src="/sites/default/files/foo.jpg" alt="..." />`
  *
- * Both are replaced with:
+ * Both are replaced with a `<drupal-media>` tag carrying the media entity
+ * UUID, for example:
  *
- *   `<drupal-media data-entity-type="media" data-entity-uuid="…"></drupal-media>`
+ *   `<drupal-media data-entity-type="media" data-entity-uuid="…">`
  *
  * The destination UUID is resolved by looking up the migrated media entity
  * keyed by the source `fid` via the configured migration_lookup id (default

@@ -112,13 +112,6 @@ final class D7NodeWithFieldCollection extends D7Node {
   /**
    * {@inheritdoc}
    */
-  public function getIds(): array {
-    return parent::getIds();
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public function __toString(): string {
     return 'd7_node_with_field_collection';
   }

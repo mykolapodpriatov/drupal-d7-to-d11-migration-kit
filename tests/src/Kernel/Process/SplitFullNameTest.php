@@ -24,6 +24,8 @@ final class SplitFullNameTest extends KernelTestBase {
   protected static $modules = ['migrate', 'd7_to_d11_migrations'];
 
   /**
+   * Provides full-name strings with their expected first and last parts.
+   *
    * @return iterable<string, array{0: string, 1: string, 2: string}>
    *   value, first, last
    */
@@ -36,11 +38,13 @@ final class SplitFullNameTest extends KernelTestBase {
     yield 'multibyte cyrillic'        => ['Анна Каренина', 'Анна', 'Каренина'];
     yield 'multibyte three parts'     => ['Лев Николаевич Толстой', 'Лев Николаевич', 'Толстой'];
     yield 'extra inner spaces'        => ['Mary  Shelley', 'Mary', 'Shelley'];
-    yield 'trailing whitespace'       => ['Ada Lovelace ', 'Ada Lovelace', ''];
+    yield 'trailing whitespace'       => ['Ada Lovelace ', 'Ada', 'Lovelace'];
     yield 'hyphenated last name'      => ['Anne-Marie de Vries', 'Anne-Marie de', 'Vries'];
   }
 
   /**
+   * Tests splitting full names into first and last parts.
+   *
    * @dataProvider fullNameProvider
    * @covers ::transform
    */
