@@ -1,3 +1,9 @@
+langcode: en
+status: true
+dependencies:
+  enforced:
+    module:
+      - d7_to_d11_migrations
 id: d7_to_d11_content
 label: 'Drupal 7 to Drupal 11 content'
 description: 'Migrates users, taxonomy, files, nodes, paragraphs and redirects from a Drupal 7 source database.'
