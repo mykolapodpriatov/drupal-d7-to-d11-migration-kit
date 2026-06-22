@@ -1,5 +1,7 @@
 # Drupal 7 to Drupal 11 Migration Kit
 
+[![CI](https://github.com/mykolapodpriatov/drupal-d7-to-d11-migration-kit/actions/workflows/ci.yml/badge.svg)](https://github.com/mykolapodpriatov/drupal-d7-to-d11-migration-kit/actions/workflows/ci.yml)
+
 A drop-in migration module that provides ready-to-run migration YAML configs
 and custom process plugins for the parts of a Drupal 7 → Drupal 11 migration
 that the migrate_drupal core stack does not handle cleanly.
