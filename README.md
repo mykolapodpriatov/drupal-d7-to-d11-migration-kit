@@ -48,7 +48,7 @@ or require manual review:
 ## Installation
 
 ```bash
-composer require nikolaj/d7-to-d11-migration-kit
+composer require mykolapodpriatov/drupal-d7-to-d11-migration-kit
 drush en d7_to_d11_migrations
 ```
 

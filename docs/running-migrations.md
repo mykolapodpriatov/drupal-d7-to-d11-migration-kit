@@ -8,7 +8,7 @@ Step-by-step procedure to take a Drupal 7 site to Drupal 11 using this kit.
 composer create-project drupal/recommended-project:^11 d11-site
 cd d11-site
 composer require drupal/migrate_plus:^6 drupal/migrate_tools:^6
-composer require nikolaj/d7-to-d11-migration-kit
+composer require mykolapodpriatov/drupal-d7-to-d11-migration-kit
 drush site:install --account-pass='change-me-locally'
 drush en migrate migrate_drupal migrate_drupal_ui d7_to_d11_migrations
 ```
@@ -27,16 +27,22 @@ drush sql:query --database=migrate_d7 "SELECT COUNT(*) FROM node"
 
 ## 3. Point the file path constant at your D7 files directory
 
-Edit `migrations/d7_to_d11_content.group.yml` (or override the constant in
-your own group YAML) so `source_base_path` resolves to the absolute path of
-the D7 `sites/default/files/` directory **as the D11 web server sees it**.
-Trailing slash required.
+The source database key and file-path constants live in the
+`d7_to_d11_content` **migration group** — a `migrate_plus` config entity
+shipped at
+`config/install/migrate_plus.migration_group.d7_to_d11_content.yml` and
+imported when the module is installed. Set `source_base_path` to the absolute
+path of the D7 `sites/default/files/` directory **as the D11 web server sees
+it** (trailing slash required). The migrations themselves are code plugins
+under `migrations/`, so editing the YAML there just needs a cache rebuild.
 
-Re-import the migration configs after the edit:
+Update the already-installed group config and rebuild caches:
 
 ```bash
+# Either edit it in the UI at /admin/structure/migrate, or set it from CLI:
+drush config:set migrate_plus.migration_group.d7_to_d11_content \
+  shared_configuration.source.constants.source_base_path '/var/www/d7-legacy/sites/default/files/'
 drush cache:rebuild
-drush migrate:import --group=d7_to_d11_content --no-progress --quiet --idlist=__noop__ 2>/dev/null || true
 ```
 
 ## 4. Inspect status

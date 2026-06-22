@@ -5,8 +5,8 @@ matter of copy-paste-edit.
 
 ## Adding a node migration
 
-1. Copy `migrations/d7_to_d11_node_article.migrate_plus.migration.yml` to
-   `migrations/d7_to_d11_node_<your_type>.migrate_plus.migration.yml`.
+1. Copy `migrations/d7_node_article.yml` to
+   `migrations/d7_node_<your_type>.yml`.
 2. Change `id`, `label`, `source.node_type`, and `destination.default_bundle`
    to your bundle's machine name.
 3. Replace the field-specific process steps with your own field mapping.
@@ -20,7 +20,7 @@ matter of copy-paste-edit.
 ## Adding a paragraph bundle from a field_collection
 
 1. Copy
-   `migrations/d7_to_d11_paragraphs_from_field_collection.migrate_plus.migration.yml`.
+   `migrations/d7_paragraphs_from_field_collection.yml`.
 2. Change:
    - `id` (e.g. `d7_paragraphs_feature_block`).
    - `source.field_name` (the D7 field_collection field machine name).
@@ -52,7 +52,7 @@ matter of copy-paste-edit.
 | Layer | Pattern |
 |---|---|
 | Migration id | `d7_<entity>_<bundle>` (e.g. `d7_node_article`) |
-| Migration YAML file | `<id>.migrate_plus.migration.yml` |
+| Migration YAML file | `migrations/<id>.yml` |
 | Migration group | `d7_to_d11_content` for all content migrations |
 | Process plugin id | `d7_to_d11_<verb>_<noun>` (e.g. `d7_to_d11_split_full_name`) |
 | Process plugin class | `Drupal\d7_to_d11_migrations\Plugin\migrate\process\<CamelCase>` |
