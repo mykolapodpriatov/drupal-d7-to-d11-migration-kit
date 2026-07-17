@@ -7,6 +7,18 @@ on:
     branches: [main]
 
 jobs:
+  validate-migrations:
+    name: Validate migration YAML wiring
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install yamllint
+        run: pipx install yamllint
+
+      - name: Validate migration YAML wiring
+        run: bash scripts/validate-migrations.sh
+
   static-analysis:
     name: Static analysis (PHPCS + PHPStan)
     runs-on: ubuntu-latest
