@@ -87,7 +87,9 @@ For a step-by-step guide see [`docs/running-migrations.md`](docs/running-migrati
 
 ## Pitfalls (the short version)
 
-Read the full list in [`docs/pitfalls.md`](docs/pitfalls.md). Highlights:
+Read the full list in [`docs/pitfalls.md`](docs/pitfalls.md); when a migration
+errors out mid-run, [`docs/troubleshooting.md`](docs/troubleshooting.md) has the
+exact drush fix for each common failure. Highlights:
 
 - **UID 1 conflict.** Drupal 11 already has uid 1 as admin. The user migration
   skips it; pre-existing role assignments must be done manually.
