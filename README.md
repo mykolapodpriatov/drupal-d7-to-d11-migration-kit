@@ -17,6 +17,7 @@ projects often enough to extract into a module.
 - Article and Basic page nodes.
 - D7 `field_collection` → D11 `paragraphs`.
 - D7 redirect module data → D11 redirect module.
+- Custom menu links (internal `node/N` links resolved to the migrated nodes).
 - Custom process plugins for the awkward bits:
   - Split a single full name field into first/last.
   - Rewrite D7 inline media tokens and `<img>` references into D11
