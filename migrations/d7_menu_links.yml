@@ -1,0 +1,81 @@
+id: d7_menu_links
+label: 'D7 custom menu links'
+migration_group: d7_to_d11_content
+migration_tags:
+  - 'Drupal 7'
+  - Content
+  - d7_to_d11
+  - menu
+
+source:
+  plugin: menu_link
+  constants:
+    # Prefix used to rebuild an entity URI from a resolved node id.
+    entity_node_prefix: 'entity:node'
+
+process:
+  id: mlid
+  title: link_title
+  description:
+    plugin: default_value
+    source: description
+    default_value: ''
+
+  # Map the common D7 system menus onto their D11 machine names. Custom menus
+  # keep their own machine name via the default; adjust the map for yours.
+  menu_name:
+    plugin: static_map
+    source: menu_name
+    map:
+      main-menu: main
+      user-menu: account
+      management: admin
+      navigation: tools
+    default_value: main
+
+  external: external
+  weight: weight
+  expanded: expanded
+  enabled: enabled
+  'link/options': options
+
+  # Resolve internal `node/N` links against the migrated article/page maps so
+  # the D11 link points at the new node id. The regex reduces `node/42` to the
+  # bare id; non-node paths (external URLs, `<front>`, admin paths) fall
+  # through the lookup as a miss and are handled by skip_on_empty below.
+  _target_nid:
+    - plugin: str_replace
+      source: link_path
+      regex: true
+      search: '#^node/(\d+)$#'
+      replace: '$1'
+    - plugin: migration_lookup
+      migration:
+        - d7_node_article
+        - d7_node_page
+      no_stub: true
+
+  # Build the D11 `entity:node/<nid>` URI from the resolved id. Rows whose
+  # link_path was not a `node/N` path leave `link/uri` unset (skip_on_empty);
+  # extend this pipeline with the core `link_uri` plugin if your menus also
+  # point at external URLs or taxonomy terms.
+  'link/uri':
+    - plugin: skip_on_empty
+      source: '@_target_nid'
+      method: process
+    - plugin: concat
+      source:
+        - constants/entity_node_prefix
+        - '@_target_nid'
+      delimiter: /
+
+  changed: updated
+
+destination:
+  plugin: 'entity:menu_link_content'
+  no_stub: true
+
+migration_dependencies:
+  required:
+    - d7_node_article
+    - d7_node_page

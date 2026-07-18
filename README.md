@@ -17,6 +17,7 @@ projects often enough to extract into a module.
 - Article and Basic page nodes.
 - D7 `field_collection` → D11 `paragraphs`.
 - D7 redirect module data → D11 redirect module.
+- Custom menu links (internal `node/N` links resolved to the migrated nodes).
 - Custom process plugins for the awkward bits:
   - Split a single full name field into first/last.
   - Rewrite D7 inline media tokens and `<img>` references into D11
@@ -86,7 +87,9 @@ For a step-by-step guide see [`docs/running-migrations.md`](docs/running-migrati
 
 ## Pitfalls (the short version)
 
-Read the full list in [`docs/pitfalls.md`](docs/pitfalls.md). Highlights:
+Read the full list in [`docs/pitfalls.md`](docs/pitfalls.md); when a migration
+errors out mid-run, [`docs/troubleshooting.md`](docs/troubleshooting.md) has the
+exact drush fix for each common failure. Highlights:
 
 - **UID 1 conflict.** Drupal 11 already has uid 1 as admin. The user migration
   skips it; pre-existing role assignments must be done manually.
