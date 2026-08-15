@@ -14,6 +14,8 @@ projects often enough to extract into a module.
 - Users (with role mapping, signature, picture, password rehash note).
 - Taxonomy vocabularies + terms (including parent relationships).
 - Files (with optional public/private destination remap).
+- File → Media: `d7_file_to_media` wraps migrated image files as `image`
+  media entities so body embeds can resolve a UUID.
 - Article and Basic page nodes.
 - D7 `field_collection` → D11 `paragraphs`.
 - D7 redirect module data → D11 redirect module.
@@ -21,7 +23,7 @@ projects often enough to extract into a module.
 - Custom process plugins for the awkward bits:
   - Split a single full name field into first/last.
   - Rewrite D7 inline media tokens and `<img>` references into D11
-    `<drupal-media>` tags using the migrated media UUID.
+    `<drupal-media>` tags using the UUID from `d7_file_to_media`.
   - D7 role id → D11 role machine name via configurable map.
   - D7 path alias lookup for redirect generation.
   - Ensure file URI lands in the right scheme (`public://` vs `private://`).

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- `d7_file_to_media` wraps image files from `d7_files` as D11 `image`
+  media entities so `RewriteMediaEmbeds` can resolve a UUID. Non-image
+  MIME types are skipped. `d7_node_article` now requires this migration.
+
 ## [0.2.0] - 2026-06-22
 
 ### Fixed

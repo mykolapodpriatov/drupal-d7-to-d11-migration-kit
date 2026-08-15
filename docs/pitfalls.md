@@ -115,13 +115,30 @@ running content migrations.
 
 ## 11. Inline media in body text
 
-The included `RewriteMediaEmbeds` plugin handles two patterns:
+`RewriteMediaEmbeds` does not invent media entities. It looks up the
+destination UUID via the `d7_file_to_media` migration (the plugin's
+`media_migration` key; `d7_node_article` sets this explicitly). That
+migration is part of this kit: it reads D7 managed files (`d7_file`
+source) and creates D11 `image` media whose `field_media_image` points
+at the file created by `d7_files`.
+
+Run `d7_files` then `d7_file_to_media` before `d7_node_article`.
+`d7_node_article` lists `d7_file_to_media` as a required dependency, so
+`drush mim --group=d7_to_d11_content` orders them correctly.
+
+The destination site must already have the standard `image` media type
+with a `field_media_image` source field (Standard profile, or create it
+by hand). Non-image files are skipped; this kit does not create
+document or video media bundles.
+
+The plugin then rewrites two patterns in body text:
 
 1. The D7 `media` module's JSON token: `[[{"type":"media","fid":"…"}]]`.
 2. Plain `<img src="/sites/default/files/…">` referenced in body.
 
 Anything more exotic (BUEditor inline tokens, custom shortcodes) needs a
-project-specific extension of the plugin.
+project-specific extension of the plugin. If a token's fid is missing
+from the `d7_file_to_media` map, the original markup is left unchanged.
 
 ## 12. Idempotent re-runs
 
