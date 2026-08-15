@@ -87,4 +87,5 @@ migration_dependencies:
   required:
     - d7_users
     - d7_files
+    - d7_file_to_media
     - d7_taxonomy_term

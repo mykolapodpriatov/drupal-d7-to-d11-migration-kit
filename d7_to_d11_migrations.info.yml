@@ -8,6 +8,8 @@ dependencies:
   - drupal:migrate_drupal
   - drupal:migrate_drupal_ui
   - drupal:file
+  - drupal:image
+  - drupal:media
   - drupal:taxonomy
   - drupal:node
   - drupal:user
