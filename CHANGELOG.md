@@ -12,6 +12,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `d7_file_to_media` wraps image files from `d7_files` as D11 `image`
   media entities so `RewriteMediaEmbeds` can resolve a UUID. Non-image
   MIME types are skipped. `d7_node_article` now requires this migration.
+- `d7_to_d11_strip_scheme` process plugin: strips the stream wrapper scheme
+  off a file URI as a pure value transform, for use as an intermediate
+  `@`-referenced pipeline step.
+
+### Fixed
+
+- `EnsureFilePublic` (`d7_to_d11_ensure_file_public`) no longer writes to the
+  migration row's source. `MigrateExecutable` freezes the source before
+  running the process pipeline, so the write threw `Exception: The source is
+  frozen and can't be changed any more` on every `d7_files` run — failing the
+  `Kernel tests (MySQL)` CI job on every push. `filepath_without_scheme` is
+  now computed by the new `d7_to_d11_strip_scheme` plugin as its own
+  destination pseudo-property and referenced via `@filepath_without_scheme`
+  from `d7_files.yml`'s `source_full_path` step instead.
+- `FileToMediaMigrationTest` no longer emits `Unable to find the wrapper
+  "private"` / `Failed to open stream` PHP warnings when writing the
+  `private://Babylon5.txt` fixture. The `stream_wrapper.private` service is
+  now registered directly in the test (matching core's own
+  `MigratePrivateFileTest`), and the test asserts on the resulting private
+  file entity so a regression here fails the test instead of only warning.
 
 ## [0.2.0] - 2026-06-22
 
