@@ -6,6 +6,7 @@ namespace Drupal\d7_to_d11_migrations\Plugin\migrate\process;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\migrate\Attribute\MigrateProcess;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\ProcessPluginBase;
@@ -38,12 +39,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   source: body/0/value
  *   media_migration: d7_file_to_media
  * @endcode
- *
- * @MigrateProcessPlugin(
- *   id = "d7_to_d11_rewrite_media_embeds",
- *   handle_multiples = FALSE
- * )
  */
+#[MigrateProcess(
+  id: 'd7_to_d11_rewrite_media_embeds',
+  handle_multiples: FALSE,
+)]
 final class RewriteMediaEmbeds extends ProcessPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

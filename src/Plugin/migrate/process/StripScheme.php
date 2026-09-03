@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\d7_to_d11_migrations\Plugin\migrate\process;
 
+use Drupal\migrate\Attribute\MigrateProcess;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
@@ -28,12 +29,11 @@ use Drupal\migrate\Row;
  *     - constants/source_base_path
  *     - '@filepath_without_scheme'
  * @endcode
- *
- * @MigrateProcessPlugin(
- *   id = "d7_to_d11_strip_scheme",
- *   handle_multiples = FALSE
- * )
  */
+#[MigrateProcess(
+  id: 'd7_to_d11_strip_scheme',
+  handle_multiples: FALSE,
+)]
 final class StripScheme extends ProcessPluginBase {
 
   use SchemeTargetTrait;

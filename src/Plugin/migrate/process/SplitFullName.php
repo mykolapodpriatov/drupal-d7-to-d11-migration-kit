@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\d7_to_d11_migrations\Plugin\migrate\process;
 
+use Drupal\migrate\Attribute\MigrateProcess;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
@@ -26,12 +27,11 @@ use Drupal\migrate\Row;
  *   source: full_name
  *   part: last
  * @endcode
- *
- * @MigrateProcessPlugin(
- *   id = "d7_to_d11_split_full_name",
- *   handle_multiples = FALSE
- * )
  */
+#[MigrateProcess(
+  id: 'd7_to_d11_split_full_name',
+  handle_multiples: FALSE,
+)]
 final class SplitFullName extends ProcessPluginBase {
 
   /**
