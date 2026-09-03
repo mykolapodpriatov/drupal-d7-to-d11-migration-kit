@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Drupal\d7_to_d11_migrations\Plugin\migrate\process;
 
 use Drupal\Component\Plugin\PluginManagerInterface;
+use Drupal\migrate\Attribute\MigrateProcess;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\ProcessPluginBase;
@@ -29,12 +30,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  *   page_migration: d7_node_page
  *   fallback_internal_prefix: 'internal:/'
  * @endcode
- *
- * @MigrateProcessPlugin(
- *   id = "d7_to_d11_path_to_alias",
- *   handle_multiples = FALSE
- * )
  */
+#[MigrateProcess(
+  id: 'd7_to_d11_path_to_alias',
+  handle_multiples: FALSE,
+)]
 final class D7PathToAlias extends ProcessPluginBase implements ContainerFactoryPluginInterface {
 
   public function __construct(

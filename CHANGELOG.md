@@ -35,6 +35,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `hook_requirements()` is now marked with the `#[LegacyRequirementsHook]`
   attribute, silencing the "without a #[LegacyRequirementsHook] attribute is
   deprecated in drupal:11.3.0" deprecation on every kernel test run.
+- All process plugins (`EnsureFilePublic`, `StripScheme`, `D7RoleMap`,
+  `D7PathToAlias`, `SplitFullName`, `RewriteMediaEmbeds`) now use the
+  `#[MigrateProcess]` PHP attribute instead of the deprecated
+  `@MigrateProcessPlugin` doc-block annotation. Plugin ids and
+  `handle_multiples` values are unchanged.
 
 ## [0.2.0] - 2026-06-22
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\d7_to_d11_migrations\Plugin\migrate\process;
 
+use Drupal\migrate\Attribute\MigrateProcess;
 use Drupal\migrate\MigrateException;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
@@ -26,12 +27,11 @@ use Drupal\migrate\Row;
  *     4: editor
  *   default_value: authenticated
  * @endcode
- *
- * @MigrateProcessPlugin(
- *   id = "d7_to_d11_role_map",
- *   handle_multiples = TRUE
- * )
  */
+#[MigrateProcess(
+  id: 'd7_to_d11_role_map',
+  handle_multiples: TRUE,
+)]
 final class D7RoleMap extends ProcessPluginBase {
 
   /**

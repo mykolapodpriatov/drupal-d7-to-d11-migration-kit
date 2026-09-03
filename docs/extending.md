@@ -62,7 +62,8 @@ matter of copy-paste-edit.
 ## Adding a process plugin
 
 1. Create the class under `src/Plugin/migrate/process/`.
-2. Annotate it with `@MigrateProcessPlugin(id = "d7_to_d11_<verb>")`.
+2. Add a `#[MigrateProcess(id: 'd7_to_d11_<verb>')]` PHP attribute above the
+   class declaration (import `Drupal\migrate\Attribute\MigrateProcess`).
 3. Add a kernel test under `tests/src/Kernel/Process/`.
 4. Document the configuration keys in the class docblock with a YAML example.
 

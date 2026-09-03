@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Drupal\d7_to_d11_migrations\Plugin\migrate\process;
 
+use Drupal\migrate\Attribute\MigrateProcess;
 use Drupal\migrate\MigrateExecutableInterface;
 use Drupal\migrate\ProcessPluginBase;
 use Drupal\migrate\Row;
@@ -35,12 +36,11 @@ use Drupal\migrate\Row;
  *   public_destination: 'public://'
  *   private_destination: 'private://'
  * @endcode
- *
- * @MigrateProcessPlugin(
- *   id = "d7_to_d11_ensure_file_public",
- *   handle_multiples = FALSE
- * )
  */
+#[MigrateProcess(
+  id: 'd7_to_d11_ensure_file_public',
+  handle_multiples: FALSE,
+)]
 final class EnsureFilePublic extends ProcessPluginBase {
 
   use SchemeTargetTrait;
