@@ -14,9 +14,10 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests the EnsureFilePublic process plugin.
  *
- * The plugin only reads its own configuration and mutates the passed Row, so it
- * is exercised here as a pure unit test with a real Row and a mocked
- * MigrateExecutableInterface, without booting a Drupal container.
+ * The plugin only reads its own configuration and the input value — it is a
+ * pure value transform that never touches the row — so it is exercised here
+ * as a pure unit test with a real Row and a mocked MigrateExecutableInterface,
+ * without booting a Drupal container.
  */
 #[Group('d7_to_d11_migrations')]
 #[CoversClass(EnsureFilePublic::class)]
@@ -30,7 +31,7 @@ final class EnsureFilePublicTest extends TestCase {
    * @param mixed $value
    *   The source value (a D7 file URI).
    * @param \Drupal\migrate\Row $row
-   *   The row whose source properties the plugin may mutate.
+   *   The row passed through to transform(), unused by the plugin itself.
    *
    * @return string
    *   The re-routed destination URI.
@@ -94,30 +95,17 @@ final class EnsureFilePublicTest extends TestCase {
   }
 
   /**
-   * Tests that the scheme-stripped target is exposed on the row.
+   * Tests that an empty string returns ''.
    */
-  public function testSetsFilepathWithoutScheme(): void {
-    $row = new Row();
-    $this->transform([], 'public://sub/dir/name.txt', $row);
-    self::assertSame('sub/dir/name.txt', $row->getSourceProperty('filepath_without_scheme'));
+  public function testEmptyStringReturnsEmpty(): void {
+    self::assertSame('', $this->transform([], '', new Row()));
   }
 
   /**
-   * Tests that an empty string returns '' and leaves the row untouched.
+   * Tests that a NULL value returns ''.
    */
-  public function testEmptyStringReturnsEmptyWithoutSideEffect(): void {
-    $row = new Row();
-    self::assertSame('', $this->transform([], '', $row));
-    self::assertNull($row->getSourceProperty('filepath_without_scheme'));
-  }
-
-  /**
-   * Tests that a NULL value returns '' and leaves the row untouched.
-   */
-  public function testNullValueReturnsEmptyWithoutSideEffect(): void {
-    $row = new Row();
-    self::assertSame('', $this->transform([], NULL, $row));
-    self::assertNull($row->getSourceProperty('filepath_without_scheme'));
+  public function testNullValueReturnsEmpty(): void {
+    self::assertSame('', $this->transform([], NULL, new Row()));
   }
 
   /**
