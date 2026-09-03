@@ -8,12 +8,14 @@
 declare(strict_types=1);
 
 use Drupal\Core\Database\Database;
+use Drupal\Core\Hook\Attribute\LegacyRequirementsHook;
 
 /**
  * Implements hook_requirements().
  *
  * Verifies that the D7 source database key is registered in settings.php.
  */
+#[LegacyRequirementsHook]
 function d7_to_d11_migrations_requirements(string $phase): array {
   $requirements = [];
 

@@ -32,6 +32,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   now registered directly in the test (matching core's own
   `MigratePrivateFileTest`), and the test asserts on the resulting private
   file entity so a regression here fails the test instead of only warning.
+- `hook_requirements()` is now marked with the `#[LegacyRequirementsHook]`
+  attribute, silencing the "without a #[LegacyRequirementsHook] attribute is
+  deprecated in drupal:11.3.0" deprecation on every kernel test run.
 
 ## [0.2.0] - 2026-06-22
 
