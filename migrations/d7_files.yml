@@ -17,6 +17,16 @@ source:
 process:
   fid: fid
   filename: filename
+
+  # Computed as its own destination pseudo-property (referenced below via
+  # `@filepath_without_scheme`) rather than inside the `uri` pipeline, so that
+  # `d7_to_d11_ensure_file_public` stays a pure value transform and never has
+  # to write to the row source (which MigrateExecutable freezes before the
+  # process pipeline runs).
+  filepath_without_scheme:
+    plugin: d7_to_d11_strip_scheme
+    source: uri
+
   uri:
     -
       plugin: d7_to_d11_ensure_file_public
@@ -40,7 +50,7 @@ process:
       plugin: concat
       source:
         - constants/source_base_path
-        - filepath_without_scheme
+        - '@filepath_without_scheme'
     -
       plugin: urlencode
 

@@ -21,6 +21,13 @@ use Drupal\migrate\Row;
  * - private_destination: scheme to use when input is in private:// (default
  *   `private://`).
  *
+ * This plugin is a pure value transform: it does not read or write any row
+ * source or destination property other than the one it is assigned to. If a
+ * following process step needs the scheme-stripped target (e.g. to build a
+ * real filesystem path), use the companion `d7_to_d11_strip_scheme` plugin as
+ * its own process step — see `filepath_without_scheme` in the file migration
+ * YAML.
+ *
  * @code
  * uri:
  *   plugin: d7_to_d11_ensure_file_public
@@ -36,6 +43,8 @@ use Drupal\migrate\Row;
  */
 final class EnsureFilePublic extends ProcessPluginBase {
 
+  use SchemeTargetTrait;
+
   /**
    * {@inheritdoc}
    */
@@ -50,33 +59,12 @@ final class EnsureFilePublic extends ProcessPluginBase {
     $scheme = $this->extractScheme($value);
     $target = $this->extractTarget($value);
 
-    // Expose the path without scheme to following process steps that need
-    // to build a real filesystem path (see `filepath_without_scheme` in the
-    // file migration YAML).
-    $row->setSourceProperty('filepath_without_scheme', $target);
-
     return match ($scheme) {
       'public' => $public_destination . $target,
       'private' => $private_destination . $target,
       'temporary' => $public_destination . $target,
       default => $value,
     };
-  }
-
-  /**
-   * Returns the scheme portion of a stream wrapper URI.
-   */
-  private function extractScheme(string $uri): ?string {
-    $position = strpos($uri, '://');
-    return $position === FALSE ? NULL : substr($uri, 0, $position);
-  }
-
-  /**
-   * Returns the part of a stream wrapper URI after the scheme.
-   */
-  private function extractTarget(string $uri): string {
-    $position = strpos($uri, '://');
-    return $position === FALSE ? $uri : substr($uri, $position + 3);
   }
 
 }
