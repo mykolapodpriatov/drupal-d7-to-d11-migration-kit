@@ -67,8 +67,10 @@ final class D7PathToAlias extends ProcessPluginBase implements ContainerFactoryP
       return '';
     }
 
-    // External URLs are passed through.
-    if (preg_match('#^(https?|mailto|tel)://?#i', $value) === 1) {
+    // External URLs are passed through. http and https need a slash.
+    // mailto and tel do not have one, and requiring it stored them as
+    // internal paths.
+    if (preg_match('#^(?:https?:/+|mailto:|tel:)#i', $value) === 1) {
       return $value;
     }
 
