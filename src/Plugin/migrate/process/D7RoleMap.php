@@ -45,11 +45,20 @@ final class D7RoleMap extends ProcessPluginBase {
     $map = $this->configuration['map'];
     $default = $this->configuration['default_value'] ?? NULL;
 
-    // D7 role data is typically an array keyed by rid. Accept either format.
+    // D7 role data is either a list of rids ([2, 3]) or a map keyed by rid
+    // ([2 => 'authenticated user']). A PHP list also has int keys, but those
+    // keys are 0, 1, 2. Treating them as rids turns [2, 3] into rids 0 and 1.
     $rids = [];
     if (is_array($value)) {
-      foreach ($value as $key => $name) {
-        $rids[] = is_int($key) || ctype_digit((string) $key) ? (int) $key : (int) $name;
+      if (array_is_list($value)) {
+        foreach ($value as $rid) {
+          $rids[] = (int) $rid;
+        }
+      }
+      else {
+        foreach ($value as $key => $name) {
+          $rids[] = is_int($key) || ctype_digit((string) $key) ? (int) $key : (int) $name;
+        }
       }
     }
     elseif (is_scalar($value)) {
