@@ -80,6 +80,17 @@ final class D7RoleMapTest extends TestCase {
   }
 
   /**
+   * A list of rids uses the values. The indexes are not role ids.
+   */
+  public function testListOfRidsUsesValuesNotIndexes(): void {
+    $config = ['map' => self::MAP, 'default_value' => 'authenticated'];
+    self::assertSame(
+      ['authenticated', 'administrator'],
+      $this->transform($config, [2, 3]),
+    );
+  }
+
+  /**
    * Tests that a scalar rid is accepted as well as an array.
    */
   public function testScalarRidIsAccepted(): void {
